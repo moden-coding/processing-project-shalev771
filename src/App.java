@@ -4,21 +4,25 @@ public class App extends PApplet {
     PImage img1;
     PImage img2;
     float length;
-    float width;
     float ballX = 250;
     float ballY = 380;
     float ballSpeedX = 0;
     float ballSpeedY = 0;
     boolean launched = false;
     boolean scored = false;
-   
-    
+    int missCount = 0;
+    int score = 0;
 
     float rectX = 455;
     float rectY = 80;
     float rectW = 50;
     float rectH = 70;
-          
+
+    float playerX = 60;
+    float playerY = 300;
+    float Speedplayer = 40;
+    private boolean missed;
+
     public static void main(String[] args) {
         PApplet.main("App");
     }
@@ -36,9 +40,9 @@ public class App extends PApplet {
     }
 
     public void draw() {
-       
+
         image(img1, 0, 0);
-        image(img2, 60, 300, 200, 350);
+        image(img2, playerX, playerY, 200, 350);
 
         fill(150, 75, 0);
 
@@ -55,65 +59,110 @@ public class App extends PApplet {
             System.out.println("ball moving");
             ballX += ballSpeedX;
             ballY += ballSpeedY;
-            
-        }  
-        
 
-            
-        
-        
-        if (ballX < width || ballX == 0 || ballY > height || ballY == 0){
-            System.out.println(ballX > width);
-            System.out.println(ballX == 0);
-            System.out.println(ballY > height);
-            System.out.println(ballY == 0);
-            System.out.println("reset");
-            resetBall();
+        } int missCount = 0;
+        int score = 0;
+        if (launched && (ballX > width || ballY > height) && !scored && !missed) {
+            missed = true;  
+            ballSpeedX = 0;  
+            missCount += 1;  
+
+       
+        missed = false;
+        ballSpeedX = 0;
+        score += 1;
+
         }
-         
+        fill(15);  
+        textSize(40);  
+        color(0,255,0);
+        
+        text("Score: " + score, 10, 20); 
+        text("Misses: " + missCount, 20, 40);  
+
+
+        if (ballX > width || ballX < 0 || ballY > height || ballY < 0) {
+            System.out.println(ballX > width);
+            System.out.println("Ballx is " + ballX);
+            System.out.println("width " + width);
+           
+            System.out.println("reset");
+                resetBall();
+           
+            
+        }
+
         boolean scored = false;
         if (!scored && checkCollision()) {
-            ballSpeedX = 0;  
-            ballSpeedY = 0;  
-            launched = false;  
-            scored = true;  
-            if (scored) {
-                fill(0,255,0);  
-                textSize(100); 
-                text("JT for 3EEEEE", width / 20 - 10, height / 3);  
+            ballSpeedX = 0;
+            ballSpeedY = 0;
+            launched = false;
+            scored = true;
+            if (scored){
+                resetBall(); 
+                fill(0, 255, 0);
+                textSize(100);
+                text("JT for 3EEEEE", width / 20 - 10, height / 3);
+                
+
+            }
+            
+            
+            if (missed)  {
+                fill(255, 0, 0);
+                textSize(100);
+                text("HOLY BRICK", width / 20 - 10, height / 3);
             }
         }
-        }
-    
+    }
 
-   
+    
 
     public void keyPressed() {
 
         boolean scored;
         if (key == ' ' && !launched) {
-            ballSpeedX = 5;
-            ballSpeedY = -5;
-            launched = true; 
+            ballSpeedX = 10;
+            ballSpeedY = -15;
+            launched = true;
 
         }
-    } public boolean checkCollision() {
-        float ballRadius = 20;  
+
+        if (keyCode == RIGHT ){
+            playerX += 30;
+            ballX += 30;
         
-       
-        if (ballX + ballRadius > rectX && ballX - ballRadius < rectX + rectW && 
-            ballY + ballRadius > rectY && ballY - ballRadius < rectY + rectH) {
-            return true;  
         }
-        return false;  
+        if (keyCode == LEFT) {
+            playerX -= 30;
+            ballX -= 30;
+        } if (keyCode == UP) {
+            playerY -= 60;
+            ballY -= 60;
+        } if (keyCode == DOWN) {
+            playerY += 60;
+            ballY += 60;
+
+        }
     }
 
-        public void resetBall() {
-            ballX = 250;  
-            ballY = 380; 
-            ballSpeedX = 0; 
-            ballSpeedY = 0; 
-            launched = false;  
+    public boolean checkCollision() {
+        float ballRadius = 20;
+
+        if (ballX + ballRadius > rectX && ballX - ballRadius < rectX + rectW &&
+                ballY + ballRadius > rectY && ballY - ballRadius < rectY + rectH) {
+            return true;
+        }
+        return false;
+    }
+
+    public void resetBall() {
+        ballX = playerX + 170;
+        ballY = playerY + 170;
+        ballSpeedX = 0;
+        ballSpeedY = 0;
+        launched = false;
+
     }
 
 }
