@@ -22,6 +22,7 @@ public class App extends PApplet {
     float playerY = 300;
     float Speedplayer = 40;
     private boolean missed;
+    boolean frameWhenCollided =  checkCollision();
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -60,63 +61,61 @@ public class App extends PApplet {
             ballX += ballSpeedX;
             ballY += ballSpeedY;
 
-        } int missCount = 0;
-        int score = 0;
-        if (launched && (ballX > width || ballY > height) && !scored && !missed) {
-            missed = true;  
-            ballSpeedX = 0;  
-            missCount += 1;  
-
-       
-        missed = false;
-        ballSpeedX = 0;
-        score += 1;
-
         }
-        fill(15);  
-        textSize(40);  
-        color(0,255,0);
-        
-        text("Score: " + score, 10, 20); 
-        text("Misses: " + missCount, 20, 40);  
+        if (scored) {
 
+            int score = 0;
+            launched = false;
+            scored = true;
+            score += 1;
+            text("score: " + score, 200, 10);
+            textSize(40);
+            fill(0, 255, 0);
+        }
 
         if (ballX > width || ballX < 0 || ballY > height || ballY < 0) {
             System.out.println(ballX > width);
             System.out.println("Ballx is " + ballX);
             System.out.println("width " + width);
-           
+
             System.out.println("reset");
-                resetBall();
-           
+            fill(255, 0, 0);
+            textSize(100);
+            text("HOLY BRICK", width / 20 - 10, height / 3);
+            resetBall(); 
             
+            if (frameWhenCollided == 150 >= frameCount){
+                fill(0, 255, 0);
+            textSize(100);
+            text("JT for 3EEEEE", width / 20 - 10, height / 3);
+
+            }
+
+           
+               
+            
+
         }
 
-        boolean scored = false;
-        if (!scored && checkCollision()) {
+        
+        if (checkCollision()) {
             ballSpeedX = 0;
             ballSpeedY = 0;
             launched = false;
-            scored = true;
-            if (scored){
-                resetBall(); 
-                fill(0, 255, 0);
-                textSize(100);
-                text("JT for 3EEEEE", width / 20 - 10, height / 3);
-                
 
-            }
-            
-            
-            if (missed)  {
-                fill(255, 0, 0);
-                textSize(100);
-                text("HOLY BRICK", width / 20 - 10, height / 3);
-            }
+            resetBall();
+            fill(0, 255, 0);
+            textSize(100);
+            text("JT for 3EEEEE", width / 20 - 10, height / 3);
+
+            // if (missed) {
+            // fill(255, 0, 0);
+            // textSize(100);
+            // text("HOLY BRICK", width / 20 - 10, height / 3);
+            // }
         }
-    }
 
-    
+    }
 
     public void keyPressed() {
 
@@ -128,18 +127,20 @@ public class App extends PApplet {
 
         }
 
-        if (keyCode == RIGHT ){
+        if (keyCode == RIGHT) {
             playerX += 30;
             ballX += 30;
-        
+
         }
         if (keyCode == LEFT) {
             playerX -= 30;
             ballX -= 30;
-        } if (keyCode == UP) {
+        }
+        if (keyCode == UP) {
             playerY -= 60;
             ballY -= 60;
-        } if (keyCode == DOWN) {
+        }
+        if (keyCode == DOWN) {
             playerY += 60;
             ballY += 60;
 
@@ -147,11 +148,15 @@ public class App extends PApplet {
     }
 
     public boolean checkCollision() {
-        float ballRadius = 20;
+        
+        int frameWhenCollided = frameCount; 
+       
+       
+        float ballRadius = 20; 
 
         if (ballX + ballRadius > rectX && ballX - ballRadius < rectX + rectW &&
                 ballY + ballRadius > rectY && ballY - ballRadius < rectY + rectH) {
-            return true;
+            return true; 
         }
         return false;
     }
