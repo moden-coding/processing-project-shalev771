@@ -25,7 +25,7 @@ public class App extends PApplet {
     boolean frameWhenCollided =  checkCollision();
 
     public static void main(String[] args) {
-        PApplet.main("App");
+        PApplet.main("App"); 
     }
 
     public void setup() {
